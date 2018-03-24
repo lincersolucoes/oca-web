@@ -107,6 +107,7 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
      /**
      * bootstrap_markdown support on list view
      **/
+    /**
     ListView.Column.include({
 
         init: function(){
@@ -132,5 +133,6 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
     });
 
     list_widget_registry.add('field.bootstrap_markdown', ListView.Column);
+    **/
 
 });
