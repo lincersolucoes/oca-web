@@ -52,7 +52,7 @@ class Binary(http.Controller):
                 'datas': base64.encodestring(ufile.read()),
                 'datas_fname': ufile.filename,
                 'res_model': model,
-                'res_id': int(id),
+                'res_id': id and int(id) or 0,
                 'res_field': field_name,
             })
             args = {
