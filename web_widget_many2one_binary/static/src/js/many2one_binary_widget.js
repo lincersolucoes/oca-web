@@ -86,6 +86,7 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
         },
     },
     init: function(field_manager, node) {
+        console.log("ATTACHMENT INIT", this, field_manager, node);
         this._super.apply(this, arguments);
         this.session = session;
         if(this.field.type != "many2one" || this.field.relation != 'ir.attachment') {
@@ -101,6 +102,7 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
         return '/web/content/' + attachment.id + '?download=true';
     },
     read_name_values : function() {
+        console.log("ATTACHMENT read_name_values", this);
         var self = this;
         var values;
         var record_id = this.get('value') && this.get('value')[0];
@@ -124,6 +126,7 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
         }
     },
     render_value: function() {
+        console.log("ATTACHMENT render_value", this);
         var self = this;
         this.read_name_values().then(function (ids) {
             self.$('.oe_placeholder_files, .oe_attachments')
@@ -148,6 +151,7 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
         });
     },
     on_file_loaded: function(e, result) {
+        console.log("ATTACHMENT on_file_loaded", this);
         if(this.node.attrs.blockui > 0) { // unblock UI
             framework.unblockUI();
         }
