@@ -10,9 +10,10 @@
         <button class="btn btn-sm btn-primary o_select_file_button o_attach">Upload your file</button>
         <t t-call="HiddenInputFile">
             <t t-set="fileupload_id" t-value="widget.fileupload_id"/>
-            <t t-set="fileupload_action" t-translation="off">/web/binary/upload_attachment</t>
+            <t t-set="fileupload_action" t-translation="off">/web/binary/upload_field_attachment</t>
             <input type="hidden" name="model" t-att-value="widget.view.model"/>
-            <input type="hidden" name="id" value="0"/>
+            <input type="hidden" name="field_name" t-att-value="widget.name"/>
+            <input t-if="widget.view.datarecord" type="hidden" name="id" t-att-value="widget.view.datarecord.id"/>
             <input t-if="widget.session.override_session" type="hidden" name="session_id" t-att-value="widget.session.session_id"/>
         </t>
     </div>
