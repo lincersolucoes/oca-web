@@ -1428,6 +1428,32 @@
             // Set the cursor
             e.setSelection(cursor, cursor + chunk.length);
           }
+        }, {
+          name: 'Tab',
+          hotkey: 'tab',
+          title: 'Tab',
+          icon: {
+            glyph: 'glyphicon glyphicon-indent-right',
+            fa: 'fa fa-indent',
+            'fa-3': 'icon-indent-right',
+            octicons: 'octicon octicon-arrow-right'
+          },
+          callback: function(e) {
+            // Prepend/Give - surround the selection
+            var chunk, cursor, selected = e.getSelection(),
+              content = e.getContent();
+
+            // transform selection and set the cursor into chunked text
+            //if {
+                chunk = selected.text;
+                e.replaceSelection('&emsp;&emsp;' + chunk);
+                // Set the cursor
+                cursor = selected.start + 12;
+             // }
+
+            // Set the cursor
+            e.setSelection(cursor, cursor + chunk.length);
+          }
         }]
       }, {
         name: 'groupUtil',
