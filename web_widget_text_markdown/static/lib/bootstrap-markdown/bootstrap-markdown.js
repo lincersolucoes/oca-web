@@ -281,7 +281,6 @@
                 if (options.additionalButtons.length > 0) {
                     // iterate the additional button groups
                     $.each(options.additionalButtons[0], function (idx, buttonGroup) {
-                        console.log("ADDITIONAL BUTTONS", idx, buttonGroup);
                         // see if the group name of the additional group matches an existing group
                         var matchingGroups = $.grep(allBtnGroups, function (allButtonGroup, allIdx) {
                             return allButtonGroup.name === buttonGroup.name;
@@ -289,7 +288,6 @@
 
                         // if it matches add the additional buttons to that group, if not just add it to the all buttons group
                         if (matchingGroups.length > 0) {
-                            console.log("MATCHING GROUP", matchingGroups[0], buttonGroup)
                             matchingGroups[0].data = matchingGroups[0].data.concat(buttonGroup.data);
                         } else {
                             allBtnGroups.push(options.additionalButtons[0][idx]);
@@ -483,11 +481,9 @@
                         options.dropZoneOptions.init = function () {
                             var caretPos = 0;
                             this.on('drop', function (e) {
-                                console.log("FILE DROP", e);
                                 caretPos = textarea.prop('selectionStart');
                             });
                             this.on('success', function (file, path) {
-                                console.log("FILE SUCCESS", file, path);
                                 var text = textarea.val();
                                 textarea.val(text.substring(0, caretPos) + '\n![description](' + path + ')\n' + text.substring(caretPos));
                             });

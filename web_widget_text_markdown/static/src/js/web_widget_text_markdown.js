@@ -47,7 +47,7 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                             savable: false,
                             iconlibrary: "fa",
                             additionalButtons: [
-                                /*[{
+                                [{
                                     name: "groupLink",
                                     data: [{
                                         name: 'cmdUploadImage',
@@ -61,10 +61,10 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                                             octicons: 'octicon octicon-file-media'
                                         },
                                         callback: function (e) {
-                                            alert("WI");
+                                            self.el.children["0"].dropzone.hiddenFileInput.click()
                                         }
                                     }]
-                                }]*/
+                                }]
                             ],
                             dropZoneOptions: {
                                 url: "/web/binary/upload_dropzone_attachment",
@@ -74,12 +74,13 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                                     'model': 'ir.attachment',
                                     'id': 0,
                                 },
+                                //clickable: "button[data-handler='bootstrap-markdown-cmdUploadImage']",
+                                //clickable: "div[id='"+ self.el.children["0"].id + "'] button[data-handler='bootstrap-markdown-cmdUploadImage']",
                                 paramName: "ufile", // The name that will be used to transfer the file
                                 previewTemplate: '<div class="dz-preview dz-file-preview"> <div class="dz-details"> <div class="dz-filename"><span data-dz-name></span></div> <div class="dz-size" data-dz-size></div> <img data-dz-thumbnail /> </div> <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div> <div class="dz-success-mark"><span>✔</span></div> <div class="dz-error-mark"><span>✘</span></div> <div class="dz-error-message"><span data-dz-errormessage></span></div> </div>',
                                 maxFilesize: 2, // MB
                                 acceptedFiles: ".jpg,.png",
                                 accept: function (file, done) {
-                                    console.log("ACCEPT", file);
                                     done();
                                 }
                             }
