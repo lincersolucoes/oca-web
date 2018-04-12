@@ -46,6 +46,18 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                             autofocus: false,
                             savable: false,
                             iconlibrary: "fa",
+                            onPreview: function(e) {
+                                var originalContent = e;
+                                self.$el.find(".dz-default").hide()
+                                self.$el.find(".dz-preview").hide()
+                                return originalContent
+                              },
+                            onPreviewEnd: function (e) {
+                                var originalContent = e;
+                                self.$el.find(".dz-default").show()
+                                self.$el.find(".dz-preview").show()
+                                return originalContent
+                            },
                             additionalButtons: [
                                 [{
                                     name: "groupLink",
@@ -77,7 +89,7 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                                 //clickable: "button[data-handler='bootstrap-markdown-cmdUploadImage']",
                                 //clickable: "div[id='"+ self.el.children["0"].id + "'] button[data-handler='bootstrap-markdown-cmdUploadImage']",
                                 paramName: "ufile", // The name that will be used to transfer the file
-                                previewTemplate: '<div class="dz-preview dz-file-preview"> <div class="dz-details"> <div class="dz-filename"><span data-dz-name></span></div> <div class="dz-size" data-dz-size></div> <img data-dz-thumbnail /> </div> <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div> <div class="dz-success-mark"><span>✔</span></div> <div class="dz-error-mark"><span>✘</span></div> <div class="dz-error-message"><span data-dz-errormessage></span></div> </div>',
+                                previewTemplate: '<div class="dz-preview dz-file-preview"> <div class="dz-details"> <div class="dz-filename"><span data-dz-name></span></div> <div class="dz-size" data-dz-size></div> <img data-dz-thumbnail /> </div> <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div> <div class="dz-error-message"><span data-dz-errormessage></span></div> </div>',
                                 maxFilesize: 2, // MB
                                 acceptedFiles: ".jpg,.png",
                                 accept: function (file, done) {
