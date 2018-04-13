@@ -12,7 +12,7 @@
     'description': """
     * Binary widget for many2one Field
     """,
-    'depends': ['web'],
+    'depends': ['web','base'],
     'qweb': [
         'static/src/xml/widget_template.xml',
     ],
