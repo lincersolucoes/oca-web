@@ -140,7 +140,8 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                         marked.setOptions({
                             highlight: function (code) {
                                 return hljs.highlightAuto(code).value;
-                            }
+                            },
+                            breaks: true,
                         });
                         this.$el.find('span[class="oe_form_text_content"]').html(marked(show_value));
                     }

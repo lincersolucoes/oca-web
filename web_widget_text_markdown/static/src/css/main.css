@@ -180,7 +180,7 @@
   padding: 0 15px;
 }
 .markdown-body blockquote {
-  border-left: 4px solid #DDD;
+  border-left: 0px hidden #FFFFFF;
   padding: 0 15px;
   color: #777;
 }
@@ -325,4 +325,12 @@
   padding: 0;
   background-color: transparent;
   border: none;
+}
+
+/* Override */
+blockquote {
+    padding: 9px 18px;
+    margin: 0 0 18px;
+    font-size: 15px; /*This was 16.25*/
+    border-left: 5px solid #dddddd
 }
