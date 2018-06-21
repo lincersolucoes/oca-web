@@ -130,7 +130,6 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
                 .replaceWith($(QWeb.render('FieldBinaryFileUploaderSingle.files', {'widget': self, 'values': [ids]})));
 
             if (ids) {
-                console.log("VALUES IDS TIENEEE!!!");
                 self.set({value: ids.id});
             }
 
