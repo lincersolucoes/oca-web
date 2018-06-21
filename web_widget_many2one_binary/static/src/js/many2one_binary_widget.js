@@ -81,7 +81,7 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
                     this.ds_file.unlink([file_id]);
                 }
                 this.$el.find('.oe_attachment').remove();
-                this.set({'value': false});
+                this.set({'value': undefined});
             }
         },
     },
@@ -128,10 +128,6 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
         this.read_name_values().then(function (ids) {
             self.$('.oe_placeholder_files, .oe_attachments')
                 .replaceWith($(QWeb.render('FieldBinaryFileUploaderSingle.files', {'widget': self, 'values': [ids]})));
-
-            if (ids) {
-                self.set({value: ids.id});
-            }
 
             // reinit input type file
             var $input = self.$('.o_form_input_file');
