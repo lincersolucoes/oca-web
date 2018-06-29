@@ -92,10 +92,17 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
             throw _.str.sprintf(_t("The type of the field '%s' must be a many2one field with a relation to 'ir.attachment' model."), this.field.string);
         }
         this.data = {};
-        this.set_value([]);
+        //this.set_value(false);
         this.ds_file = new data.DataSetSearch(this, 'ir.attachment');
         this.fileupload_id = _.uniqueId('oe_fileupload_temp');
         $(window).on(this.fileupload_id, _.bind(this.on_file_loaded, this));
+    },
+    reinit_value: function(val) {
+        this.internal_set_value(val);
+        this.floating = false;
+        if (!this.no_rerender) {
+            this.render_value();
+        }
     },
     get_file_url: function(attachment) {
         return '/web/content/' + attachment.id + '?download=true';
@@ -129,8 +136,6 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
             self.$('.oe_placeholder_files, .oe_attachments')
                 .replaceWith($(QWeb.render('FieldBinaryFileUploaderSingle.files', {'widget': self, 'values': [ids]})));
 
-            if (ids) {self.set({value: ids.id})}
-
             // reinit input type file
             var $input = self.$('.o_form_input_file');
             $input.after($input.clone(true)).remove();
@@ -148,6 +153,21 @@ var FieldMany2OneBinarySingleFiles = common.AbstractField.extend(common.Completi
             else
                 self.$el.find('.oe_add').show();
         });
+    },
+    set_value: function(value_) {
+        if (value_ instanceof Array) {
+            this.display_value = {};
+            this.display_value_backup = {};
+            if (! this.options.always_reload) {
+                this.display_value["" + value_[0]] = value_[1];
+            }
+            else {
+                this.display_value_backup["" + value_[0]] = value_[1];
+            }
+            value_ = value_[0];
+        }
+        value_ = value_ || false;
+        this.reinit_value(value_);
     },
     on_file_loaded: function(e, result) {
         if(this.node.attrs.blockui > 0) { // unblock UI
