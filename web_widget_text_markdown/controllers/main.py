@@ -42,8 +42,6 @@ class Binary(http.Controller):
     @serialize_exception
     def upload_dropzone_attachment(self, model, id, ufile):
         Model = request.env['ir.attachment']
-        print('We are here now!!!!!!!!')
-        print(request.env.context)
         try:
             attachment = Model.create({
                 'name': ufile.filename,
