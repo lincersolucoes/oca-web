@@ -85,6 +85,7 @@ odoo.define("web_widget_text_markdown.bootstrap_markdown",
                                     'csrf_token': core.csrf_token,
                                     'model': this.view.dataset.model,
                                     'id': this.view.datarecord.id,
+                                    'field': this.name
                                 },
                                 //clickable: "button[data-handler='bootstrap-markdown-cmdUploadImage']",
                                 //clickable: "div[id='"+ self.el.children["0"].id + "'] button[data-handler='bootstrap-markdown-cmdUploadImage']",
