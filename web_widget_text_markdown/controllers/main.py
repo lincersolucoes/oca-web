@@ -40,7 +40,7 @@ class Binary(http.Controller):
 
     @http.route('/web/binary/upload_dropzone_attachment', type='http', auth="user")
     @serialize_exception
-    def upload_dropzone_attachment(self, model, id, ufile):
+    def upload_dropzone_attachment(self, model, id, field, ufile):
         Model = request.env['ir.attachment']
         try:
             attachment = Model.create({
@@ -48,7 +48,8 @@ class Binary(http.Controller):
                 'datas': base64.encodestring(ufile.read()),
                 'datas_fname': ufile.filename,
                 'res_model': model,
-                'res_id': int(id)
+                'res_id': int(id),
+                'res_field':field
             })
             args = {
                 'filename': ufile.filename,
