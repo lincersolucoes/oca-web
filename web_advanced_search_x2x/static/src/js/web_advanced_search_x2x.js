@@ -13,6 +13,65 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
     var data = require('web.data');
     var core = require('web.core');
     var pyeval = require('web.pyeval');
+    var filters = require('web.search_filters');
+    var search_inputs = require('web.search_inputs');
+    var FavoriteMenu = require('web.FavoriteMenu');
+
+    FavoriteMenu.include({
+        facet_for: function (filter) {
+            var res = this._super.apply(this, arguments);
+            res.field.get_exclude_domain = function () {};
+            return res
+        },
+    })
+
+    search_inputs.FilterGroup.include({
+        get_exclude_domain: function (facet) {
+                var domains = facet.values.chain()
+                .map(function (f) { return f.get('value').attrs.exclude_domain; })
+                .without('[]')
+                .reject(_.isEmpty)
+                .value();
+
+            if (!domains.length) { return; }
+            if (domains.length === 1) { return domains[0]; }
+            for (var i=domains.length; --i;) {
+                domains.unshift(['|']);
+            }
+            return _.extend(new data.CompoundDomain(), {
+                __domains: domains
+            });
+        }
+    });
+
+    search_inputs.Field.include({
+        get_exclude_domain: function (facet) {
+            return ;
+        }
+    });
+
+    search_inputs.Filter.include({
+        get_exclude_domain: function () { },
+    });
+
+    filters.ExtendedSearchProposition.include({
+        get_filter: function () {
+            var res = this._super.apply(this, arguments);
+            if (this.attrs.selected === null || this.attrs.selected === undefined)
+            return null;
+
+            var field = this.attrs.selected,
+            op_select = this.$('.o_searchview_extended_prop_op')[0],
+            operator = op_select.options[op_select.selectedIndex];
+
+            if (this.value.get_operator() == 'not_in_domain') {
+                delete res.attrs.domain;
+                res.attrs.exclude_domain = this.value.get_domain(field, operator);
+            }
+            return res;
+        },
+
+    });
 
     var X2XAdvancedSearchPropositionMixin = {
         template: "web_advanced_search_x2x.proposition",
@@ -36,6 +95,10 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
             // Append domain operator
             this.operators.push({
                 'value': 'domain', 'text': core._lt('is in selection'),
+            });
+            // Append not in domain operator
+            this.operators.push({
+                'value': 'not_in_domain', 'text': core._lt('is not in selection'),
             });
             // Avoid hiding filter when using special widgets
             this.events = $.extend({}, this.events, {
@@ -148,6 +211,8 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
                     return "many2one";
                 case "domain":
                     return "char_domain";
+                case "not_in_domain":
+                    return "char_domain";
             }
         },
 
@@ -178,10 +243,28 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
                 });
                 return domain;
             } else {
-                return this._super.apply(this, arguments);
+                if (this.get_operator() == "not_in_domain") {
+                    var value = this._x2x_field.get_value();
+                    var domain = new data.CompoundDomain(),
+                        name = this.field.name;
+                    $.map(value, function (el) {
+                        var leaf = el;
+                        if (typeof el !== "string") {
+                            leaf = [
+                            _.str.sprintf("%s.%s", name, el[0]),
+                            el[1],
+                            el[2],
+                            ];
+                        }
+                        domain.add([leaf]);
+                    });
+                    return domain;
+                }
+                else {
+                    return this._super.apply(this, arguments);
+                }
             }
         },
-
         get_operator: function () {
             return !this.isDestroyed() &&
                 this.getParent().$('.o_searchview_extended_prop_op').val();
@@ -239,6 +322,7 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
             //so we need to rebuild the domain if one of our CompoundDomains
             //is involved
             var result = this._super.apply(this, arguments);
+            var exclude_domains = [];
             _.each(result.domains, function(domain, index)
             {
                 if(!_.isArray(domain))
@@ -271,6 +355,19 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
                     result.domains[index] = combined;
                 }
             });
+            this.query.each(function (facet) {
+                var field = facet.get('field');
+                var domain = field.get_exclude_domain(facet);
+                if (domain) {
+                    exclude_domains.push(domain);
+                }
+            });
+            if (exclude_domains.length){
+                result.contexts.push(
+                    {exclude_domain: pyeval.eval('domains',exclude_domains)}
+                )
+            }
+
             return result;
         },
     });
