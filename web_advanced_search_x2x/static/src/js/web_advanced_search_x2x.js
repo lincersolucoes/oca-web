@@ -55,6 +55,17 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
     });
 
     filters.ExtendedSearchProposition.include({
+        select_field: function(field) {
+            this._super.apply(this, arguments);
+            this.is_not_in_domain = false;
+        },
+        operator_changed: function (e) {
+            var val = $(e.target).val();
+            if (val === 'not_in_domain') {
+                this.is_not_in_domain = true;
+            }
+            this._super.apply(this, arguments);
+        },
         get_filter: function () {
             var res = this._super.apply(this, arguments);
             if (this.attrs.selected === null || this.attrs.selected === undefined)
@@ -64,7 +75,7 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
             op_select = this.$('.o_searchview_extended_prop_op')[0],
             operator = op_select.options[op_select.selectedIndex];
 
-            if (this.value.get_operator() == 'not_in_domain') {
+            if (this.is_not_in_domain) {
                 delete res.attrs.domain;
                 res.attrs.exclude_domain = this.value.get_domain(field, operator);
             }
