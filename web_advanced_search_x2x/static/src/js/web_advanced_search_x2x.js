@@ -370,10 +370,12 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
             });
             this.query.each(function (facet) {
                 var field = facet.get('field');
-                var domain = field.get_exclude_domain(facet);
-                if (domain) {
-                    exclude_domains.push(domain);
-                }
+                if(typeof field.get_exclude_domain === 'function') {
+                    var domain = field.get_exclude_domain(facet);
+                    if (domain) {
+                        exclude_domains.push(domain);
+                    }
+                };
             });
             if (exclude_domains.length){
                 result.contexts.push(
