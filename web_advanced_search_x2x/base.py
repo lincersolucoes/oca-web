@@ -11,7 +11,7 @@ from odoo.osv import expression
     upgrade=lambda self, value, args, offset=0, limit=None, order=None, count=False: value if count else self.browse(value),
     downgrade=lambda self, value, args, offset=0, limit=None, order=None, count=False: value if count else value.ids)
 def custom_search(self, args, offset=0, limit=None, order=None, count=False):
-    if self.env.context.get('exclude_domain'):
+    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name:
         exclude_domain = self.env.context.get('exclude_domain')
         exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
         args = expression.AND([args, [('id', 'not in', exclude_ids)]])

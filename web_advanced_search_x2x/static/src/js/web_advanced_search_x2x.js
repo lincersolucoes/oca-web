@@ -32,7 +32,6 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
                 .without('[]')
                 .reject(_.isEmpty)
                 .value();
-
             if (!domains.length) { return; }
             if (domains.length === 1) { return domains[0]; }
             for (var i=domains.length; --i;) {
@@ -63,6 +62,9 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
             var val = $(e.target).val();
             if (val === 'not_in_domain') {
                 this.is_not_in_domain = true;
+            }
+            else {
+                this.is_not_in_domain = false;
             }
             this._super.apply(this, arguments);
         },
@@ -375,7 +377,7 @@ odoo.define('web_advanced_search_x2x.search_filters', function (require) {
             });
             if (exclude_domains.length){
                 result.contexts.push(
-                    {exclude_domain: pyeval.eval('domains',exclude_domains)}
+                    {exclude_domain: pyeval.eval('domains',exclude_domains), exclude_model: this.model}
                 )
             }
 
