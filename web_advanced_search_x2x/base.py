@@ -20,4 +20,16 @@ def custom_search(self, args, offset=0, limit=None, order=None, count=False):
     return res
 
 
+@api.model
+def custom_read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name:
+        exclude_domain = self.env.context.get('exclude_domain')
+        exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
+        domain = expression.AND([domain, [('id', 'not in', exclude_ids)]])
+
+    res = BaseModel.read_group(self, domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+    return res
+
+
 Model.search = custom_search
+Model.read_group = custom_read_group
