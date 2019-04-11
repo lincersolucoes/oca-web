@@ -4,11 +4,9 @@
 {
     'name': 'Widget Form Reload',
     'version': '10.0.0.0.0',
-    "author": 'TKO',
-    'category': 'web',
-    'license': 'AGPL-3',
-
-    'website': 'http://tko.tko-br.com',
+    'author': 'Intelligenti',
+    'category': 'CRM',
+    'website': 'http://intelligenti.com.br',
     'description': """
      Reload form without reloading whole tab
     """,
