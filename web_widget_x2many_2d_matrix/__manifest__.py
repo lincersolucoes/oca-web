@@ -9,7 +9,7 @@
     "author": "Therp BV, "
               "Tecnativa,"
               "Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "category": "Hidden/Dependency",
     "summary": "Show list fields as a matrix",
     "depends": [

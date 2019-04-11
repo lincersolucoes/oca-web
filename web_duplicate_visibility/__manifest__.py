@@ -9,7 +9,7 @@
     "website": "https://odoo-community.org/",
     "author": "Pierre Verkest <pverkest@anybox.fr>,"
               " Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "application": False,
     'installable': False,
     "depends": [

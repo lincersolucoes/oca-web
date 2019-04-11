@@ -8,7 +8,7 @@
     "version": "8.0.0.1.0",
     "category": "web",
     "website": "http://akretion.com",
-    "license": "AGPL-3",
+     
     "author": "Akretion / Odoo Community Association (OCA)",
     "depends": [
         'web',

@@ -9,7 +9,7 @@
     "author": "Therp BV, "
               "Tecnativa, "
               "Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "category": "Usability",
     "summary": "Use a search widget in advanced search for x2x fields",
     "depends": [

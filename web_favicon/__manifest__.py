@@ -9,7 +9,7 @@
     "author": "Therp BV, "
               "Tecnativa, "
               "Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "category": "Website",
     "summary": "Allows to set a custom shortcut icon (aka favicon)",
     "depends": [

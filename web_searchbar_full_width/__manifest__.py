@@ -24,7 +24,7 @@
     "author": "Therp BV, "
               "Odoo Community Association (OCA), "
               "Siddharth Bhalgami",
-    "license": "AGPL-3",
+     
     "category": "Tools",
     "summary": "Show search bar in full screen width",
     "depends": [

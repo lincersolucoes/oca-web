@@ -11,7 +11,7 @@
               "Agile Business Group, "
               "Tecnativa, "
               "Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "category": 'Web',
     'depends': [
         'web',

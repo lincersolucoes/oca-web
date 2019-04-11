@@ -7,7 +7,7 @@
     "author": "Therp BV, "
               "ACSONE SA/NV, "
               "Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "category": "Hidden/Dependency",
     "summary": "Show a message box to users",
     "depends": [

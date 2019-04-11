@@ -7,7 +7,7 @@
     "author": "VividLab, "
               "Odoo Community Association (OCA), "
               "Kaushal Prajapati",
-    "license": "AGPL-3",
+     
     "category": "Web",
     "website": "http://www.vividlab.de",
     'installable': True,

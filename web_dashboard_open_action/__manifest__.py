@@ -22,7 +22,7 @@
     "name": "Open a dashboard's action",
     "version": "8.0.1.0.0",
     "author": "Therp BV,Odoo Community Association (OCA)",
-    "license": "AGPL-3",
+     
     "category": "Hidden",
     "summary": "Adds a button to open a dashboard in full mode",
     "depends": [

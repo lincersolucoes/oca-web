@@ -9,7 +9,7 @@
 {
     "name": "Web - Numpad Dot as decimal separator",
     "version": "10.0.1.1.0",
-    "license": "AGPL-3",
+     
     "summary": "Allows using numpad dot to enter period decimal separator",
     "depends": [
         "web",
