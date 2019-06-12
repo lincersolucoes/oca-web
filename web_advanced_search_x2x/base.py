@@ -11,7 +11,12 @@ from odoo.osv import expression
     upgrade=lambda self, value, args, offset=0, limit=None, order=None, count=False: value if count else self.browse(value),
     downgrade=lambda self, value, args, offset=0, limit=None, order=None, count=False: value if count else value.ids)
 def custom_search(self, args, offset=0, limit=None, order=None, count=False):
-    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name:
+    if isinstance(args, list):
+        args_with_id = 'id' in [x[0] for x in args if isinstance(x, (tuple, list)) and len(x) == 3] # If we are already sending an arg with id we will skip it because it will be [('id','in',[1])] and we are going to be on formview.
+    else:
+        args_with_id = False
+
+    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name and not args_with_id:
         exclude_domain = self.env.context.get('exclude_domain')
         exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
         args = expression.AND([args, [('id', 'not in', exclude_ids)]])
@@ -22,7 +27,12 @@ def custom_search(self, args, offset=0, limit=None, order=None, count=False):
 
 @api.model
 def custom_read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
-    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name:
+    if isinstance(domain, list):
+        args_with_id = 'id' in [x[0] for x in domain if isinstance(x, (tuple, list)) and len(x) == 3]
+    else:
+        args_with_id = False
+
+    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name and not args_with_id:
         exclude_domain = self.env.context.get('exclude_domain')
         exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
         domain = expression.AND([domain, [('id', 'not in', exclude_ids)]])
