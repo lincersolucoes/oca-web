@@ -16,12 +16,32 @@ def custom_search(self, args, offset=0, limit=None, order=None, count=False):
     else:
         args_with_id = False
 
-    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name and not args_with_id:
-        exclude_domain = self.env.context.get('exclude_domain')
-        exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
-        args = expression.AND([args, [('id', 'not in', exclude_ids)]])
+    new_args = []
 
-    res = BaseModel.search(self, args, offset=offset, limit=limit, order=order, count=count)
+    for cond in args or []:
+        if isinstance(cond, (tuple, list)) and cond[1] in ['domain', 'not_in_domain']:
+            model = self._name
+            if isinstance(cond[2], (tuple, list)):
+                for fieldname in cond[0].split('.'):
+                    field = self.env[model]._fields[fieldname]
+                    if field.type in ('one2many', 'many2many','many2one'):
+                        comodel = field.comodel_name
+                        domain_ids = self.env[comodel].search(cond[2]).ids
+                        if cond[1] == 'domain':
+                            new_args.append([cond[0], 'in', domain_ids])
+                        elif cond[1] == 'not_in_domain':
+                            exclude_ids = self.search([[cond[0], 'in', domain_ids]]).ids
+                            new_args.append(['id', 'not in', exclude_ids])
+
+        else:
+            new_args.append(cond)
+
+    #if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name and not args_with_id:
+    #    exclude_domain = self.env.context.get('exclude_domain')
+    #    exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
+    #    args = expression.AND([args, [('id', 'not in', exclude_ids)]])
+
+    res = BaseModel.search(self, new_args, offset=offset, limit=limit, order=order, count=count)
     return res
 
 
@@ -32,12 +52,32 @@ def custom_read_group(self, domain, fields, groupby, offset=0, limit=None, order
     else:
         args_with_id = False
 
-    if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name and not args_with_id:
-        exclude_domain = self.env.context.get('exclude_domain')
-        exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
-        domain = expression.AND([domain, [('id', 'not in', exclude_ids)]])
+    new_domain = []
 
-    res = BaseModel.read_group(self, domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+    for cond in domain or []:
+        if isinstance(cond, (tuple, list)) and cond[1] in ['domain', 'not_in_domain']:
+            model = self._name
+            if isinstance(cond[2], (tuple, list)):
+                for fieldname in cond[0].split('.'):
+                    field = self.env[model]._fields[fieldname]
+                    if field.type in ('one2many', 'many2many', 'many2one'):
+                        comodel = field.comodel_name
+                        domain_ids = self.env[comodel].search(cond[2]).ids
+                        if cond[1] == 'domain':
+                            new_domain.append([cond[0], 'in', domain_ids])
+                        elif cond[1] == 'not_in_domain':
+                            exclude_ids = self.search([[cond[0], 'in', domain_ids]]).ids
+                            new_domain.append(['id', 'not in', exclude_ids])
+
+        else:
+            new_domain.append(cond)
+
+    # if self.env.context.get('exclude_domain') and self.env.context.get('exclude_model') and self.env.context.get('exclude_model') == self._name and not args_with_id:
+    #     exclude_domain = self.env.context.get('exclude_domain')
+    #     exclude_ids = self.with_context(exclude_domain=False).search(exclude_domain).ids
+    #     domain = expression.AND([domain, [('id', 'not in', exclude_ids)]])
+
+    res = BaseModel.read_group(self, new_domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
     return res
 
 
